@@ -1,0 +1,6 @@
+ int N = citations.length;
+        int index = 0;
+        while(index < N && N - index > citations[index]){
+            index++;
+        }
+        return N - index;
