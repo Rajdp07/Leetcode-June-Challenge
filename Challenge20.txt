@@ -1,0 +1,34 @@
+class Solution {
+    public String getPermutation(int n, int k) {
+        
+        List<Integer> list = new ArrayList<>();
+        
+        for(int i=1; i<=n; i++)
+            list.add(i);
+        
+      
+        int fact = factorial(n);
+        
+        StringBuilder sb = new StringBuilder();
+        k = k-1;
+       
+        for(int i=0; i<n ;i++){
+            
+             int f =  fact / (n-i);
+             int ind = k / f;
+             sb.append(list.get(ind));
+             k = k%f;
+             fact = f;
+             list.remove(ind);
+            
+        }
+        return sb.toString();
+    }
+    
+    private int factorial(int n){
+        int p=1;
+        for(int i=1;i<=n;i++)
+            p*=i;
+        return p;
+    }
+}
