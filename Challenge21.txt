@@ -1,0 +1,30 @@
+class Solution {
+    public int calculateMinimumHP(int[][] dungeon) {
+      if(dungeon == null || dungeon.length==0 || dungeon[0]==null || dungeon[0].length==0) {
+            return 0;
+        }
+        int m = dungeon.length, n = dungeon[0].length;
+        
+        int[][] dp = new int[m][n];
+        dp[m-1][n-1] = Math.max(1-dungeon[m-1][n-1], 1);
+        
+        return dfs(dungeon, dp, 0, 0);
+    }
+    
+    private int dfs(int[][] dungeon, int[][] dp, int x, int y) {
+        int m = dungeon.length;
+        int n = dungeon[0].length;
+        
+        if(x == m || y == n) return Integer.MAX_VALUE/2;
+        if(dp[x][y] > 0) return dp[x][y];
+        
+        int right = Math.max(dfs(dungeon, dp, x, y+1) - dungeon[x][y], 1);
+        int down = Math.max(dfs(dungeon, dp, x+1, y) - dungeon[x][y], 1);
+        
+        dp[x][y] = Math.min(right, down);
+        
+        return dp[x][y];
+        
+    }
+        
+}
