@@ -1,0 +1,16 @@
+class Solution {
+    public int singleNumber(int[] nums) {
+        int ones = 0;
+        int twos = 0;
+        int not_threes = 0;
+        for(int n : nums) {
+            twos |= (ones & n);
+            ones ^= n;
+            not_threes = ~(ones & twos);
+            ones &= not_threes;
+            twos &= not_threes;
+        }
+        
+        return ones;
+    }
+}
