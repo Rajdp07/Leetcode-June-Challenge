@@ -1,0 +1,9 @@
+for(int i = 0;i < nums.length; i++)
+        {
+            if(nums[Math.abs(nums[i])] < 0)return Math.abs(nums[i]); 
+            // if it is negative, then we have already visited the element once.
+            
+            nums[Math.abs(nums[i])] =- nums[Math.abs(nums[i])];
+            // we are denoting the visited elements by negating the element.
+        }
+        return -1;
