@@ -1,0 +1,60 @@
+class Solution {
+     private Map<String, List<String>> ticketsMap = new HashMap<>();
+    private Map<String, boolean[]> ticketStatus = new HashMap<>();
+    private LinkedList<String> output = new LinkedList<>();
+    private int numOfTickets = 0;
+
+    public List<String> findItinerary(List<List<String>> tickets) {
+        numOfTickets = tickets.size();
+		// construct an adjacency list
+        for(List<String> ticket: tickets) {
+            String source = ticket.get(0);
+            String destination = ticket.get(1);
+            if(!ticketsMap.containsKey(source)) {
+                ticketsMap.put(source, new ArrayList<>());
+            }
+            ticketsMap.get(source).add(destination);
+        }
+		// map to keep track of visited/un-visited destinations
+        for (Map.Entry<String, List<String>> entry: ticketsMap.entrySet()) {
+			// we sort the array to make sure lexicographically sorted destinations are picked first
+			//might not always get a valid path but we atleast attempt to pick the destination that is least lexicographically
+            Collections.sort(entry.getValue());
+            ticketStatus.put(entry.getKey(), new boolean[entry.getValue().size()]);
+        }
+        output.add("JFK");
+        dfsWithBackTrack("JFK");
+        return output;
+    }
+
+    private boolean dfsWithBackTrack(String source) {
+        if(numOfTickets == 0) {
+            return true;
+        }
+        List<String> destList = ticketsMap.get(source);
+		//if there is nowhere else to go and numOfTickets is still greater than 0, it means we failed to find a valid path
+        if(destList == null)   return false;
+        int pointer = 0;
+        boolean[] visited = ticketStatus.get(source);
+        for(String dest: destList) {
+            if(!visited[pointer]) {
+                output.add(dest);
+                numOfTickets--;
+                visited[pointer] = true;
+				// attempt to take a path via this dest
+                boolean success = dfsWithBackTrack(dest);
+				//end the loop if successful
+                if (success) {
+                    return true;
+                } else {
+				//else undo current destination and try to use the next destination from the current airport
+                    numOfTickets++;
+                    output.pollLast();
+                    visited[pointer] = false;
+                }
+            }
+            pointer++;
+        }
+        return false;
+    }
+}
